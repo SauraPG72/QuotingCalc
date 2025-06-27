@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Calculator - Swyft Finance</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #255565 0%, #4EB395 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: #255565;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            padding: 30px;
+        }
+
+        .input-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #e9ecef;
+        }
+
+        .results-section {
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #e9ecef;
+        }
+
+        .section-title {
+            font-size: 1.4em;
+            color: #255565;
+            margin-bottom: 20px;
+            font-weight: 600;
+            border-bottom: 2px solid #4EB395;
+            padding-bottom: 8px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #255565;
+            font-size: 0.95em;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        input[type="number"], select, input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        input[type="number"]:focus, select:focus, input[type="text"]:focus {
+            outline: none;
+            border-color: #4EB395;
+            box-shadow: 0 0 0 3px rgba(78, 179, 149, 0.1);
+        }
+
+        .btn {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95em;
+            transition: all 0.3s ease;
+            margin: 5px;
+            background: #255565;
+            color: white;
+        }
+
+        .btn:hover {
+            background: #4EB395;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37, 85, 101, 0.3);
+        }
+
+        .btn-danger {
+            background: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .results-display {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #4EB395;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 6px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            font-weight: 600;
+            color: #255565;
+        }
+
+        .result-value {
+            font-weight: 700;
+            color: #4EB395;
+            font-size: 1.1em;
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        /* Email-ready quote table */
+        .email-quote-section {
+            grid-column: 1 / -1;
+            margin-top: 30px;
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid #e9ecef;
+        }
+
+        .email-quote-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            margin-bottom: 15px;
+        }
+
+        .email-quote-table td {
+            padding: 4px 8px;
+            border: 1px solid #000;
+            vertical-align: top;
+        }
+
+        .email-quote-table .label-col {
+            background-color: #f0f0f0;
+            font-weight: bold;
+            width: 40%;
+        }
+
+        .email-quote-table .value-col {
+            background-color: white;
+            width: 60%;
+        }
+
+        .email-additional-info {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            margin-bottom: 15px;
+        }
+
+        .email-additional-info p {
+            margin-bottom: 2px;
+        }
+
+        .copy-button {
+            background: #255565;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        .copy-button:hover {
+            background: #4EB395;
+        }
+
+        .quotes-section {
+            grid-column: 1 / -1;
+            margin-top: 30px;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #e9ecef;
+        }
+
+        .quotes-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .quotes-table th {
+            background: #255565;
+            color: white;
+            padding: 6px 8px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.85em;
+        }
+
+        .quotes-table td {
+            padding: 5px 8px;
+            border-bottom: 1px solid #e9ecef;
+            font-size: 0.85em;
+        }
+
+        .quotes-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        .quotes-table tr:hover {
+            background-color: rgba(78, 179, 149, 0.1);
+        }
+
+        .amortisation-section {
+            grid-column: 1 / -1;
+            margin-top: 30px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #e9ecef;
+        }
+
+        .amortisation-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+            display: block;
+        }
+
+        .amortisation-table thead, 
+        .amortisation-table tbody tr {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+        }
+
+        .amortisation-table th,
+        .amortisation-table td {
+            padding: 6px;
+            text-align: right;
+            border: 1px solid #ddd;
+            width: 16.66%;
+            font-size: 0.9em;
+        }
+
+        .amortisation-table th {
+            background: #255565;
+            color: white;
+            position: sticky;
+            top: 0;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .percentage-input-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .percentage-input-group input {
+            flex: 1;
+        }
+
+        .percentage-input-group select {
+            width: 80px;
+            flex: none;
+        }
+
+        .percentage-display {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 20px;
+            }
+            
+            .button-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Swyft Finance Loan Calculator</h1>
+            <p>Professional Loan Calculation Tool</p>
+        </div>
+
+        <div class="main-content">
+            <!-- Input Section -->
+            <div class="input-section">
+                <h2 class="section-title">Loan Parameters</h2>
+                
+                <div class="input-group">
+                    <label>Principal Amount ($)</label>
+                    <input type="number" id="principal" value="150000" step="0.01">
+                </div>
+
+                <div class="input-group">
+                    <label>Asset Description</label>
+                    <input type="text" id="assetDescription" value="New Land Rover Defender" placeholder="e.g. New Land Rover Defender">
+                </div>
+
+                <div class="input-group">
+                    <label>Lender Fee ($)</label>
+                    <div class="input-row">
+                        <input type="number" id="lenderFee" value="500" step="0.01">
+                        <select id="lenderFeeFinanced">
+                            <option value="upfront">Payable at Settlement</option>
+                            <option value="financed">Financed</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Origination Fee ($)</label>
+                    <div class="input-row">
+                        <input type="number" id="originationFee" value="0" step="0.01">
+                        <select id="originationFeeFinanced">
+                            <option value="waived">Waived</option>
+                            <option value="financed">Financed</option>
+                            <option value="upfront">Payable at Settlement</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Monthly Fee ($)</label>
+                    <input type="number" id="monthlyFee" value="0" step="0.01">
+                </div>
+
+                <div class="input-group">
+                    <label>Annual Interest Rate (%)</label>
+                    <input type="number" id="annualRate" value="8.5" step="0.01">
+                </div>
+
+                <div class="input-group">
+                    <label>Loan Term (months)</label>
+                    <input type="number" id="months" value="60" step="1">
+                </div>
+
+                <div class="input-group">
+                    <label>Repayment Type</label>
+                    <select id="repaymentType">
+                        <option value="arrears">Arrears</option>
+                        <option value="advance">Advance</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>Residual Value</label>
+                    <div class="percentage-input-group">
+                        <input type="number" id="residualValue" value="0" step="0.01">
+                        <select id="residualType" onchange="updateResidualCalculation()">
+                            <option value="dollar">$</option>
+                            <option value="percent">%</option>
+                        </select>
+                    </div>
+                    <div class="percentage-display" id="residualDisplay"></div>
+                </div>
+
+                <div class="input-group">
+                    <label>Commissions</label>
+                    <div class="percentage-input-group">
+                        <input type="number" id="brokerage" value="0" step="0.01">
+                        <select id="brokerageType" onchange="updateBrokerageCalculation()">
+                            <option value="dollar">$</option>
+                            <option value="percent">%</option>
+                        </select>
+                    </div>
+                    <div class="percentage-display" id="brokerageDisplay"></div>
+                </div>
+
+                <button class="btn" onclick="calculateLoan()" style="width: 100%; font-size: 1.1em; padding: 15px;">
+                    Calculate Loan
+                </button>
+            </div>
+
+            <!-- Results Section -->
+            <div class="results-section">
+                <h2 class="section-title">Calculation Results</h2>
+                
+                <div class="results-display" id="results">
+                    <div class="result-item">
+                        <span class="result-label">Monthly Payment:</span>
+                        <span class="result-value" id="monthlyPaymentResult">$0.00</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Total Amount:</span>
+                        <span class="result-value" id="totalAmountResult">$0.00</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Residual Value:</span>
+                        <span class="result-value" id="residualResult">$0.00</span>
+                    </div>
+                    <div class="result-item" id="baseRateRow">
+                        <span class="result-label">Base Rate:</span>
+                        <span class="result-value" id="baseRateResult">0.00%</span>
+                    </div>
+                    <div class="result-item" id="effectiveRateRow">
+                        <span class="result-label">Comparison Rate:</span>
+                        <span class="result-value" id="effectiveRateResult">0.00%</span>
+                    </div>
+                    <div class="result-item" id="brokerageRow">
+                        <span class="result-label">Commissions:</span>
+                        <span class="result-value" id="brokerageResultDisplay">$0.00</span>
+                    </div>
+                </div>
+
+                <div class="button-grid">
+                    <button class="btn" onclick="addQuoteToLog()">Add Quote to Log</button>
+                    <button class="btn btn-danger" onclick="clearQuotesLog()">Clear Quotes Log</button>
+                    <button class="btn" onclick="toggleBaseRate()">Toggle Base Rate</button>
+                    <button class="btn" onclick="toggleComparisonRate()">Toggle Comparison Rate</button>
+                    <button class="btn" onclick="toggleBrokerage()" id="brokerageToggle">Toggle Commissions</button>
+                </div>
+            </div>
+
+            <!-- Email-Ready Quote Section -->
+            <div class="email-quote-section">
+                <h2 class="section-title">Email Quote (Copy & Paste Ready)</h2>
+                <div id="emailQuoteContainer">
+                    <!-- This will be populated from the quotes log -->
+                </div>
+                <button class="copy-button" onclick="copyQuoteToClipboard()">Copy Quote to Clipboard</button>
+            </div>
+
+            <!-- Quotes Log Section -->
+            <div class="quotes-section">
+                <h2 class="section-title">Quotes Log</h2>
+                <div style="overflow-x: auto;">
+                    <table class="quotes-table" id="quotesTable">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Finance Amount</th>
+                                <th>Asset</th>
+                                <th>Term</th>
+                                <th>Payment</th>
+                                <th>Type</th>
+                                <th>Residual</th>
+                                <th>Base Rate</th>
+                                <th>Comparison Rate</th>
+                                <th>Lender Fee</th>
+                                <th>Origination Fee</th>
+                                <th>Monthly Fee</th>
+                                <th>Commissions</th>
+                                <th>Total Amount</th>
+                                <th>Notes</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="quotesBody">
+                        </tbody>
+                    </table>
+                </div>
+                <button class="btn btn-danger" onclick="clearQuotesLog()">Clear All Quotes</button>
+            </div>
+
+            <!-- Amortisation Schedule -->
+            <div class="amortisation-section">
+                <h2 class="section-title">Amortisation Schedule</h2>
+                <div style="max-height: 400px; overflow-y: auto;">
+                    <table class="amortisation-table" id="amortisationTable">
+                        <thead>
+                            <tr>
+                                <th>Payment #</th>
+                                <th>Principal</th>
+                                <th>Interest</th>
+                                <th>Monthly Fees</th>
+                                <th>Total Paid</th>
+                                <th>Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody id="amortisationBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let quotesData = [];
+        let comparisonRateVisible = true;
+        let brokerageVisible = true;
+        let baseRateVisible = true;
+
+        function updateResidualCalculation() {
+            const residualType = document.getElementById('residualType').value;
+            const principal = parseFloat(document.getElementById('principal').value) || 0;
+            const residualValue = parseFloat(document.getElementById('residualValue').value) || 0;
+            const residualDisplay = document.getElementById('residualDisplay');
+            
+            if (residualValue === 0) {
+                residualDisplay.textContent = '';
+                return;
+            }
+            
+            if (residualType === 'dollar') {
+                // Show percentage equivalent
+                const percentage = ((residualValue / principal) * 100).toFixed(2);
+                residualDisplay.textContent = `(${percentage}% of finance amount)`;
+            } else {
+                // Show dollar equivalent
+                const dollarAmount = (principal * residualValue / 100).toFixed(2);
+                residualDisplay.textContent = `(${parseFloat(dollarAmount).toLocaleString('en-AU')} dollar amount)`;
+            }
+        }
+
+        function updateBrokerageCalculation() {
+            const brokerageType = document.getElementById('brokerageType').value;
+            const principal = parseFloat(document.getElementById('principal').value) || 0;
+            const lenderFee = document.getElementById('lenderFeeFinanced').value === 'financed' ? 
+                (parseFloat(document.getElementById('lenderFee').value) || 0) : 0;
+            const originationFee = document.getElementById('originationFeeFinanced').value === 'financed' ? 
+                (parseFloat(document.getElementById('originationFee').value) || 0) : 0;
+            const brokerageValue = parseFloat(document.getElementById('brokerage').value) || 0;
+            const brokerageDisplay = document.getElementById('brokerageDisplay');
+            
+            if (brokerageValue === 0) {
+                brokerageDisplay.textContent = '';
+                return;
+            }
+            
+            // Calculate base amount for percentage (principal + financed fees)
+            const baseAmount = principal + lenderFee + originationFee;
+            
+            if (brokerageType === 'dollar') {
+                // Show percentage equivalent
+                const percentage = ((brokerageValue / baseAmount) * 100).toFixed(2);
+                brokerageDisplay.textContent = `(${percentage}% of financed amount)`;
+            } else {
+                // Show dollar equivalent
+                const dollarAmount = (baseAmount * brokerageValue / 100).toFixed(2);
+                brokerageDisplay.textContent = `(${parseFloat(dollarAmount).toLocaleString('en-AU')} dollar amount)`;
+            }
+        }
+
+        function getLoanInputs() {
+            const principal = parseFloat(document.getElementById('principal').value) || 0;
+            const lenderFee = document.getElementById('lenderFeeFinanced').value === 'financed' ? 
+                (parseFloat(document.getElementById('lenderFee').value) || 0) : 0;
+            const originationFee = document.getElementById('originationFeeFinanced').value === 'financed' ? 
+                (parseFloat(document.getElementById('originationFee').value) || 0) : 0;
+            const monthlyFee = parseFloat(document.getElementById('monthlyFee').value) || 0;
+            const annualRate = (parseFloat(document.getElementById('annualRate').value) || 0) / 100;
+            const months = parseInt(document.getElementById('months').value) || 0;
+            const repaymentType = document.getElementById('repaymentType').value;
+            
+            // Handle residual value (percentage or dollar)
+            let residualValue = parseFloat(document.getElementById('residualValue').value) || 0;
+            if (document.getElementById('residualType').value === 'percent') {
+                residualValue = principal * (residualValue / 100);
+            }
+            
+            // Handle brokerage (percentage or dollar) - base on principal + financed fees
+            const baseAmountForBrokerage = principal + lenderFee + originationFee;
+            let brokerage = parseFloat(document.getElementById('brokerage').value) || 0;
+            if (document.getElementById('brokerageType').value === 'percent') {
+                brokerage = baseAmountForBrokerage * (brokerage / 100);
+            }
+
+            return {
+                principal: principal + brokerage + lenderFee + originationFee,
+                originalPrincipal: principal,
+                lenderFee: lenderFee,
+                lenderFeeOriginal: parseFloat(document.getElementById('lenderFee').value) || 0,
+                originationFee: originationFee,
+                originationFeeOriginal: parseFloat(document.getElementById('originationFee').value) || 0,
+                monthlyFee: monthlyFee,
+                annualRate: annualRate,
+                monthlyRate: annualRate / 12,
+                months: months,
+                repaymentType: repaymentType,
+                residualValue: residualValue,
+                brokerage: brokerage,
+                lenderFeeFinanced: document.getElementById('lenderFeeFinanced').value === 'financed',
+                originationFeeFinanced: document.getElementById('originationFeeFinanced').value,
+                brokerageOriginal: parseFloat(document.getElementById('brokerage').value) || 0,
+                brokerageType: document.getElementById('brokerageType').value,
+                residualOriginal: parseFloat(document.getElementById('residualValue').value) || 0,
+                residualType: document.getElementById('residualType').value,
+                assetDescription: document.getElementById('assetDescription').value || ''
+            };
+        }
+
+        function performLoanCalculations(data) {
+            let monthlyPayment = (data.principal * data.monthlyRate * Math.pow(1 + data.monthlyRate, data.months) - data.residualValue * data.monthlyRate) / (Math.pow(1 + data.monthlyRate, data.months) - 1);
+            
+            let printedAmount, totalAmount, effectiveRate, adjustedPrincipal;
+            adjustedPrincipal = data.principal - data.brokerage;
+            
+            if (data.repaymentType === "advance") {
+                let monthlyPaymentAdjusted = monthlyPayment / (1 + data.monthlyRate);
+                printedAmount = monthlyPaymentAdjusted + data.monthlyFee;
+                totalAmount = ((monthlyPaymentAdjusted + data.monthlyFee) * data.months) + data.residualValue;
+                effectiveRate = calculateEffectiveRateAdvances(adjustedPrincipal, data.months, monthlyPaymentAdjusted, data.residualValue);
+                monthlyPayment = monthlyPaymentAdjusted;
+            } else {
+                printedAmount = monthlyPayment + data.monthlyFee;
+                totalAmount = ((monthlyPayment + data.monthlyFee) * data.months) + data.residualValue;
+                effectiveRate = calculateEffectiveRateArrears(adjustedPrincipal, data.months, monthlyPayment, data.residualValue);
+            }
+            
+            return {
+                monthlyPayment: monthlyPayment,
+                printedAmount: printedAmount,
+                totalAmount: totalAmount,
+                effectiveRate: effectiveRate,
+                adjustedPrincipal: adjustedPrincipal,
+                principal: data.principal
+            };
+        }
+
+        function calculateEffectiveRateArrears(principal, months, monthlyPayment, residualValue) {
+            let low = 0;
+            let high = 1;
+            let precision = 0.0000001;
+            let guessRate;
+            
+            while (high - low > precision) {
+                guessRate = (low + high) / 2;
+                let calculatedPayment = (principal * guessRate * Math.pow(1 + guessRate, months) - residualValue * guessRate) / (Math.pow(1 + guessRate, months) - 1);
+                if (calculatedPayment > monthlyPayment) {
+                    high = guessRate;
+                } else {
+                    low = guessRate;
+                }
+            }
+            return guessRate * 12 * 100;
+        }
+
+        function calculateEffectiveRateAdvances(principal, months, monthlyPayment, residualValue) {
+            let low = 0;
+            let high = 1;
+            let precision = 0.0000001;
+            let guessRate;
+            
+            while (high - low > precision) {
+                guessRate = (low + high) / 2;
+                let calculatedPayment = ((principal * guessRate * Math.pow(1 + guessRate, months) - residualValue * guessRate) / (Math.pow(1 + guessRate, months) - 1)) / (1 + guessRate);
+                if (calculatedPayment > monthlyPayment) {
+                    high = guessRate;
+                } else {
+                    low = guessRate;
+                }
+            }
+            return guessRate * 12 * 100;
+        }
+
+        function calculateLoan() {
+            const data = getLoanInputs();
+            const results = performLoanCalculations(data);
+            
+            // Update display
+            document.getElementById('monthlyPaymentResult').textContent = `${results.printedAmount.toFixed(2)}`;
+            document.getElementById('totalAmountResult').textContent = `${results.totalAmount.toFixed(2)}`;
+            document.getElementById('residualResult').textContent = `${data.residualValue.toFixed(2)}`;
+            document.getElementById('baseRateResult').textContent = `${(data.annualRate * 100).toFixed(2)}%`;
+            document.getElementById('effectiveRateResult').textContent = `${results.effectiveRate.toFixed(2)}%`;
+            document.getElementById('brokerageResultDisplay').textContent = `${data.brokerage.toFixed(2)}`;
+            
+            // Update percentage displays
+            updateResidualCalculation();
+            updateBrokerageCalculation();
+            
+            // Generate amortisation schedule
+            generateAmortisationSchedule(data, results);
+        }
+
+        function addQuoteToLog() {
+            const data = getLoanInputs();
+            const results = performLoanCalculations(data);
+            
+            const quote = {
+                date: new Date().toLocaleDateString('en-AU'),
+                financeAmount: data.originalPrincipal,
+                asset: data.assetDescription,
+                term: `${data.months} months`,
+                payment: data.monthlyFee > 0 
+                    ? `$ ${results.printedAmount.toFixed(2)} (incl. $${data.monthlyFee.toFixed(2)} monthly fee)`
+                    : `$ ${results.printedAmount.toFixed(2)} (no monthly fees)`,
+                type: data.repaymentType.charAt(0).toUpperCase() + data.repaymentType.slice(1),
+                residual: data.residualValue > 0 
+                    ? `$${data.residualValue.toLocaleString('en-AU', {minimumFractionDigits: 2})} (${((data.residualValue/data.originalPrincipal)*100).toFixed(0)}%)`
+                    : 'NIL',
+                baseRate: `${(data.annualRate * 100).toFixed(2)}%`,
+                comparisonRate: `${results.effectiveRate.toFixed(2)}%`,
+                lenderFee: `$ ${data.lenderFeeOriginal.toFixed(0)}${data.lenderFeeFinanced ? '' : ' (payable at settlement)'}`,
+                originationFee: data.originationFeeFinanced === 'waived' ? '$ waived' : `$ ${data.originationFeeOriginal.toFixed(0)}${data.originationFeeFinanced === 'upfront' ? ' (payable at settlement)' : ''}`,
+                monthlyFee: `$${data.monthlyFee.toFixed(2)}`,
+                commissions: data.brokerageType === 'percent' 
+                    ? `$ ${data.brokerage.toLocaleString('en-AU', {minimumFractionDigits: 0})} (${data.brokerageOriginal}%)`
+                    : `$ ${data.brokerage.toLocaleString('en-AU', {minimumFractionDigits: 0})}`,
+                totalAmount: `$${results.totalAmount.toFixed(2)}`,
+                notes: '',
+                id: Date.now()
+            };
+            
+            quotesData.push(quote);
+            updateQuotesTable();
+            updateEmailQuoteDisplay();
+        }
+
+        function updateQuotesTable() {
+            const tbody = document.getElementById('quotesBody');
+            tbody.innerHTML = '';
+            
+            quotesData.forEach(quote => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${quote.date}</td>
+                    <td>$${quote.financeAmount.toLocaleString('en-AU')}</td>
+                    <td>${quote.asset}</td>
+                    <td>${quote.term}</td>
+                    <td>${quote.payment}</td>
+                    <td>${quote.type}</td>
+                    <td>${quote.residual}</td>
+                    <td class="${baseRateVisible ? '' : 'hidden'}">${quote.baseRate}</td>
+                    <td class="${comparisonRateVisible ? '' : 'hidden'}">${quote.comparisonRate}</td>
+                    <td>${quote.lenderFee}</td>
+                    <td>${quote.originationFee}</td>
+                    <td>${quote.monthlyFee}</td>
+                    <td class="${brokerageVisible ? '' : 'hidden'}">${quote.commissions}</td>
+                    <td>${quote.totalAmount}</td>
+                    <td><input type="text" placeholder="Notes..." style="border:none;background:transparent;width:100%;font-size:11px;" onchange="updateQuoteNotes(${quote.id}, this.value)"></td>
+                    <td><button class="btn btn-danger" style="padding:3px 6px;font-size:11px;" onclick="deleteQuote(${quote.id})">Delete</button></td>
+                `;
+            });
+        }
+
+        function updateEmailQuoteDisplay() {
+            const container = document.getElementById('emailQuoteContainer');
+            container.innerHTML = '';
+            
+            if (quotesData.length === 0) {
+                container.innerHTML = '<p>No quotes added yet. Add quotes from the calculation results above.</p>';
+                return;
+            }
+            
+            // Group quotes by finance amount and asset
+            const groupedQuotes = {};
+            quotesData.forEach(quote => {
+                const key = `${quote.financeAmount}-${quote.asset}`;
+                if (!groupedQuotes[key]) {
+                    groupedQuotes[key] = {
+                        financeAmount: quote.financeAmount,
+                        asset: quote.asset,
+                        quotes: []
+                    };
+                }
+                groupedQuotes[key].quotes.push(quote);
+            });
+            
+            // Create sections for each finance amount/asset combination
+            Object.values(groupedQuotes).forEach(group => {
+                // Header table
+                const headerDiv = document.createElement('div');
+                headerDiv.innerHTML = `
+                    <table class="email-quote-table">
+                        <tr>
+                            <td class="label-col" style="font-weight: bold;">Finance Amount</td>
+                            <td class="value-col" style="font-weight: bold;">$ ${group.financeAmount.toLocaleString('en-AU', {minimumFractionDigits: 2})}</td>
+                        </tr>
+                        <tr>
+                            <td class="label-col" style="font-weight: bold;">Asset</td>
+                            <td class="value-col" style="font-weight: bold;">${group.asset}</td>
+                        </tr>
+                    </table>
+                `;
+                container.appendChild(headerDiv);
+                
+                // Quote options for this finance amount/asset
+                group.quotes.forEach(quote => {
+                    const quoteDiv = document.createElement('div');
+                    quoteDiv.innerHTML = `
+                        <table class="email-quote-table" style="margin-top: 10px;">
+                            <tr>
+                                <td class="label-col">Term</td>
+                                <td class="value-col">${quote.term}</td>
+                            </tr>
+                            <tr>
+                                <td class="label-col">Repayments</td>
+                                <td class="value-col">${quote.payment}</td>
+                            </tr>
+                            <tr>
+                                <td class="label-col">Residual</td>
+                                <td class="value-col">${quote.residual}</td>
+                            </tr>
+                        </table>
+                        <div class="email-additional-info">
+                            <p><strong>Lender Fee:</strong> ${quote.lenderFee}</p>
+                            <p><strong>Origination Fee:</strong> ${quote.originationFee}</p>
+                            <p class="${comparisonRateVisible ? '' : 'hidden'}"><strong>Comparison rate:</strong> ${quote.comparisonRate}</p>
+                            <p class="${baseRateVisible ? '' : 'hidden'}"><strong>Base rate:</strong> ${quote.baseRate}</p>
+                            <p class="${brokerageVisible ? '' : 'hidden'}"><strong>Commissions:</strong> ${quote.commissions}</p>
+                        </div>
+                    `;
+                    container.appendChild(quoteDiv);
+                });
+            });
+        }
+
+        function copyQuoteToClipboard() {
+            const quoteContainer = document.getElementById('emailQuoteContainer');
+            const range = document.createRange();
+            range.selectNode(quoteContainer);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+            
+            try {
+                document.execCommand('copy');
+                alert('Quote copied to clipboard! You can now paste it into your email.');
+            } catch (err) {
+                alert('Unable to copy to clipboard. Please manually select and copy the quote.');
+            }
+            
+            window.getSelection().removeAllRanges();
+        }
+
+        function generateAmortisationSchedule(data, results) {
+            const tbody = document.getElementById('amortisationBody');
+            tbody.innerHTML = '';
+            
+            if (data.repaymentType === "arrears") {
+                let outstanding = data.principal;
+                for (let i = 1; i <= data.months; i++) {
+                    let interest = outstanding * data.monthlyRate;
+                    let principalPaid = results.monthlyPayment - interest;
+                    outstanding -= principalPaid;
+                    let total = results.monthlyPayment + data.monthlyFee;
+                    
+                    const row = tbody.insertRow();
+                    row.innerHTML = `
+                        <td>${i}</td>
+                        <td>$${principalPaid.toFixed(2)}</td>
+                        <td>$${interest.toFixed(2)}</td>
+                        <td>$${data.monthlyFee.toFixed(2)}</td>
+                        <td>$${total.toFixed(2)}</td>
+                        <td>$${Math.max(0, outstanding).toFixed(2)}</td>
+                    `;
+                }
+                if (data.residualValue > 0) {
+                    const row = tbody.insertRow();
+                    row.innerHTML = `
+                        <td>${data.months + 1}</td>
+                        <td>$${data.residualValue.toFixed(2)}</td>
+                        <td>$0.00</td>
+                        <td>$0.00</td>
+                        <td>$${data.residualValue.toFixed(2)}</td>
+                        <td>$0.00</td>
+                    `;
+                }
+            } else if (data.repaymentType === "advance") {
+                let outstanding = data.principal;
+                // First payment - no interest
+                let interest = 0;
+                let principalPaid = results.monthlyPayment;
+                outstanding -= principalPaid;
+                let total = results.monthlyPayment + data.monthlyFee;
+                
+                let row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>1</td>
+                    <td>$${principalPaid.toFixed(2)}</td>
+                    <td>$${interest.toFixed(2)}</td>
+                    <td>$${data.monthlyFee.toFixed(2)}</td>
+                    <td>$${total.toFixed(2)}</td>
+                    <td>$${outstanding.toFixed(2)}</td>
+                `;
+                
+                // Subsequent payments
+                for (let i = 2; i <= data.months; i++) {
+                    interest = outstanding * data.monthlyRate;
+                    principalPaid = results.monthlyPayment - interest;
+                    outstanding -= principalPaid;
+                    total = results.monthlyPayment + data.monthlyFee;
+                    
+                    row = tbody.insertRow();
+                    row.innerHTML = `
+                        <td>${i}</td>
+                        <td>$${principalPaid.toFixed(2)}</td>
+                        <td>$${interest.toFixed(2)}</td>
+                        <td>$${data.monthlyFee.toFixed(2)}</td>
+                        <td>$${total.toFixed(2)}</td>
+                        <td>$${Math.max(0, outstanding).toFixed(2)}</td>
+                    `;
+                }
+                if (data.residualValue > 0) {
+                    row = tbody.insertRow();
+                    row.innerHTML = `
+                        <td>${data.months + 1}</td>
+                        <td>$${data.residualValue.toFixed(2)}</td>
+                        <td>$0.00</td>
+                        <td>$0.00</td>
+                        <td>$${data.residualValue.toFixed(2)}</td>
+                        <td>$0.00</td>
+                    `;
+                }
+            }
+        }
+
+        function updateQuoteNotes(id, notes) {
+            const quote = quotesData.find(q => q.id === id);
+            if (quote) {
+                quote.notes = notes;
+            }
+        }
+
+        function deleteQuote(id) {
+            quotesData = quotesData.filter(q => q.id !== id);
+            updateQuotesTable();
+            updateEmailQuoteDisplay();
+        }
+
+        function clearQuotesLog() {
+            if (confirm('Are you sure you want to clear all quotes from the log?')) {
+                quotesData = [];
+                updateQuotesTable();
+                updateEmailQuoteDisplay();
+            }
+        }
+
+        function toggleBaseRate() {
+            baseRateVisible = !baseRateVisible;
+            document.getElementById('baseRateRow').style.display = baseRateVisible ? 'flex' : 'none';
+            updateQuotesTable();
+            updateEmailQuoteDisplay();
+        }
+
+        function toggleComparisonRate() {
+            comparisonRateVisible = !comparisonRateVisible;
+            document.getElementById('effectiveRateRow').style.display = comparisonRateVisible ? 'flex' : 'none';
+            updateQuotesTable();
+            updateEmailQuoteDisplay();
+        }
+
+        function toggleBrokerage() {
+            brokerageVisible = !brokerageVisible;
+            document.getElementById('brokerageRow').style.display = brokerageVisible ? 'flex' : 'none';
+            updateQuotesTable();
+            updateEmailQuoteDisplay();
+        }
+
+        // Auto-calculate when inputs change
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputs = document.querySelectorAll('input:not(#assetDescription), select');
+            inputs.forEach(input => {
+                input.addEventListener('change', function() {
+                    calculateLoan();
+                });
+                input.addEventListener('input', function() {
+                    // Update displays without full recalculation for percentage displays
+                    if (input.id === 'residualValue' || input.id === 'residualType') {
+                        updateResidualCalculation();
+                    }
+                    if (input.id === 'brokerage' || input.id === 'brokerageType' || input.id === 'principal' || input.id === 'lenderFee' || input.id === 'originationFee' || input.id === 'lenderFeeFinanced' || input.id === 'originationFeeFinanced') {
+                        updateBrokerageCalculation();
+                    }
+                });
+            });
+            
+            // Initial calculation
+            calculateLoan();
+        });
+    </script>
+</body>
+</html>
