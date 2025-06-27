@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Calculator - Swyft Finance</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Swyft Finance Loan Calculator</h1>
+            <p>Professional Loan Calculation Tool</p>
+        </div>
+
+        <div class="main-content">
+            <!-- Input Section -->
+            <div class="input-section">
+                <h2 class="section-title">Loan Parameters</h2>
+                
+                <div class="input-group">
+                    <label>Principal Amount ($)</label>
+                    <input type="number" id="principal" value="150000" step="0.01">
+                </div>
+
+                <div class="input-group">
+                    <label>Asset Description</label>
+                    <input type="text" id="assetDescription" value="New Land Rover Defender" placeholder="e.g. New Land Rover Defender">
+                </div>
+
+                <div class="input-group">
+                    <label>Lender Fee ($)</label>
+                    <div class="input-row">
+                        <input type="number" id="lenderFee" value="500" step="0.01">
+                        <select id="lenderFeeFinanced">
+                            <option value="upfront">Payable at Settlement</option>
+                            <option value="financed">Financed</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Origination Fee ($)</label>
+                    <div class="input-row">
+                        <input type="number" id="originationFee" value="0" step="0.01">
+                        <select id="originationFeeFinanced">
+                            <option value="waived">Waived</option>
+                            <option value="financed">Financed</option>
+                            <option value="upfront">Payable at Settlement</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Monthly Fee ($)</label>
+                    <input type="number" id="monthlyFee" value="0" step="0.01">
+                </div>
+
+                <div class="input-group">
+                    <label>Annual Interest Rate (%)</label>
+                    <input type="number" id="annualRate" value="8.5" step="0.01">
+                </div>
+
+                <div class="input-group">
+                    <label>Loan Term (months)</label>
+                    <input type="number" id="months" value="60" step="1">
+                </div>
+
+                <div class="input-group">
+                    <label>Repayment Type</label>
+                    <select id="repaymentType">
+                        <option value="arrears">Arrears</option>
+                        <option value="advance">Advance</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>Residual Value</label>
+                    <div class="percentage-input-group">
+                        <input type="number" id="residualValue" value="0" step="0.01">
+                        <select id="residualType" onchange="updateResidualCalculation()">
+                            <option value="dollar">$</option>
+                            <option value="percent">%</option>
+                        </select>
+                    </div>
+                    <div class="percentage-display" id="residualDisplay"></div>
+                </div>
+
+                <div class="input-group">
+                    <label>Commissions</label>
+                    <div class="percentage-input-group">
+                        <input type="number" id="brokerage" value="0" step="0.01">
+                        <select id="brokerageType" onchange="updateBrokerageCalculation()">
+                            <option value="dollar">$</option>
+                            <option value="percent">%</option>
+                        </select>
+                    </div>
+                    <div class="percentage-display" id="brokerageDisplay"></div>
+                </div>
+
+                <button class="btn" onclick="calculateLoan()" style="width: 100%; font-size: 1.1em; padding: 15px;">
+                    Calculate Loan
+                </button>
+            </div>
+
+            <!-- Results Section -->
+            <div class="results-section">
+                <h2 class="section-title">Calculation Results</h2>
+                
+                <div class="results-display" id="results">
+                    <div class="result-item">
+                        <span class="result-label">Monthly Payment:</span>
+                        <span class="result-value" id="monthlyPaymentResult">$0.00</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Total Amount:</span>
+                        <span class="result-value" id="totalAmountResult">$0.00</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Residual Value:</span>
+                        <span class="result-value" id="residualResult">$0.00</span>
+                    </div>
+                    <div class="result-item" id="baseRateRow">
+                        <span class="result-label">Base Rate:</span>
+                        <span class="result-value" id="baseRateResult">0.00%</span>
+                    </div>
+                    <div class="result-item" id="effectiveRateRow">
+                        <span class="result-label">Comparison Rate:</span>
+                        <span class="result-value" id="effectiveRateResult">0.00%</span>
+                    </div>
+                    <div class="result-item" id="brokerageRow">
+                        <span class="result-label">Commissions:</span>
+                        <span class="result-value" id="brokerageResultDisplay">$0.00</span>
+                    </div>
+                </div>
+
+                <div class="button-grid">
+                    <button class="btn" onclick="addQuoteToLog()">Add Quote to Log</button>
+                    <button class="btn btn-danger" onclick="clearQuotesLog()">Clear Quotes Log</button>
+                    <button class="btn" onclick="toggleBaseRate()">Toggle Base Rate</button>
+                    <button class="btn" onclick="toggleComparisonRate()">Toggle Comparison Rate</button>
+                    <button class="btn" onclick="toggleBrokerage()" id="brokerageToggle">Toggle Commissions</button>
+                </div>
+            </div>
+
+            <!-- Email-Ready Quote Section -->
+            <div class="email-quote-section">
+                <h2 class="section-title">Email Quote (Copy & Paste Ready)</h2>
+                <div id="emailQuoteContainer">
+                    <!-- This will be populated from the quotes log -->
+                </div>
+                <button class="copy-button" onclick="copyQuoteToClipboard()">Copy Quote to Clipboard</button>
+            </div>
+
+            <!-- Quotes Log Section -->
+            <div class="quotes-section">
+                <h2 class="section-title">Quotes Log</h2>
+                <div style="overflow-x: auto;">
+                    <table class="quotes-table" id="quotesTable">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Finance Amount</th>
+                                <th>Asset</th>
+                                <th>Term</th>
+                                <th>Payment</th>
+                                <th>Type</th>
+                                <th>Residual</th>
+                                <th>Base Rate</th>
+                                <th>Comparison Rate</th>
+                                <th>Lender Fee</th>
+                                <th>Origination Fee</th>
+                                <th>Monthly Fee</th>
+                                <th>Commissions</th>
+                                <th>Total Amount</th>
+                                <th>Notes</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="quotesBody">
+                        </tbody>
+                    </table>
+                </div>
+                <button class="btn btn-danger" onclick="clearQuotesLog()">Clear All Quotes</button>
+            </div>
+
+            <!-- Amortisation Schedule -->
+            <div class="amortisation-section">
+                <h2 class="section-title">Amortisation Schedule</h2>
+                <div style="max-height: 400px; overflow-y: auto;">
+                    <table class="amortisation-table" id="amortisationTable">
+                        <thead>
+                            <tr>
+                                <th>Payment #</th>
+                                <th>Principal</th>
+                                <th>Interest</th>
+                                <th>Monthly Fees</th>
+                                <th>Total Paid</th>
+                                <th>Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody id="amortisationBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/loan-calculator.js"></script>
+    <script src="js/calculations.js"></script>
+    <script src="js/quotes-manager.js"></script>
+    <script src="js/amortisation.js"></script>
+    <script src="js/ui-controller.js"></script>
+</body>
+</html> 

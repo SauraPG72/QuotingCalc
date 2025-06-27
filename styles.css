@@ -1,0 +1,348 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #255565 0%, #4EB395 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.header {
+    background: #255565;
+    color: white;
+    padding: 25px;
+    text-align: center;
+}
+
+.header h1 {
+    font-size: 2.2em;
+    margin-bottom: 10px;
+    font-weight: 300;
+}
+
+.header p {
+    opacity: 0.9;
+    font-size: 1.1em;
+}
+
+.main-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    padding: 30px;
+}
+
+.input-section {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #e9ecef;
+}
+
+.results-section {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #e9ecef;
+}
+
+.section-title {
+    font-size: 1.4em;
+    color: #255565;
+    margin-bottom: 20px;
+    font-weight: 600;
+    border-bottom: 2px solid #4EB395;
+    padding-bottom: 8px;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #255565;
+    font-size: 0.95em;
+}
+
+.input-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+input[type="number"], select, input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1em;
+    transition: all 0.3s ease;
+}
+
+input[type="number"]:focus, select:focus, input[type="text"]:focus {
+    outline: none;
+    border-color: #4EB395;
+    box-shadow: 0 0 0 3px rgba(78, 179, 149, 0.1);
+}
+
+.btn {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95em;
+    transition: all 0.3s ease;
+    margin: 5px;
+    background: #255565;
+    color: white;
+}
+
+.btn:hover {
+    background: #4EB395;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(37, 85, 101, 0.3);
+}
+
+.btn-danger {
+    background: #dc3545;
+}
+
+.btn-danger:hover {
+    background: #c82333;
+}
+
+.results-display {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    border-left: 4px solid #4EB395;
+}
+
+.result-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding: 6px 0;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.result-item:last-child {
+    border-bottom: none;
+}
+
+.result-label {
+    font-weight: 600;
+    color: #255565;
+}
+
+.result-value {
+    font-weight: 700;
+    color: #4EB395;
+    font-size: 1.1em;
+}
+
+.button-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+/* Email-ready quote table */
+.email-quote-section {
+    grid-column: 1 / -1;
+    margin-top: 30px;
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid #e9ecef;
+}
+
+.email-quote-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    margin-bottom: 15px;
+}
+
+.email-quote-table td {
+    padding: 4px 8px;
+    border: 1px solid #000;
+    vertical-align: top;
+}
+
+.email-quote-table .label-col {
+    background-color: #f0f0f0;
+    font-weight: bold;
+    width: 40%;
+}
+
+.email-quote-table .value-col {
+    background-color: white;
+    width: 60%;
+}
+
+.email-additional-info {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    margin-bottom: 15px;
+}
+
+.email-additional-info p {
+    margin-bottom: 2px;
+}
+
+.copy-button {
+    background: #255565;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-right: 10px;
+}
+
+.copy-button:hover {
+    background: #4EB395;
+}
+
+.quotes-section {
+    grid-column: 1 / -1;
+    margin-top: 30px;
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #e9ecef;
+}
+
+.quotes-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.quotes-table th {
+    background: #255565;
+    color: white;
+    padding: 6px 8px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.85em;
+}
+
+.quotes-table td {
+    padding: 5px 8px;
+    border-bottom: 1px solid #e9ecef;
+    font-size: 0.85em;
+}
+
+.quotes-table tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.quotes-table tr:hover {
+    background-color: rgba(78, 179, 149, 0.1);
+}
+
+.amortisation-section {
+    grid-column: 1 / -1;
+    margin-top: 30px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #e9ecef;
+}
+
+.amortisation-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    max-height: 400px;
+    overflow-y: auto;
+    display: block;
+}
+
+.amortisation-table thead, 
+.amortisation-table tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+.amortisation-table th,
+.amortisation-table td {
+    padding: 6px;
+    text-align: right;
+    border: 1px solid #ddd;
+    width: 16.66%;
+    font-size: 0.9em;
+}
+
+.amortisation-table th {
+    background: #255565;
+    color: white;
+    position: sticky;
+    top: 0;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.percentage-input-group {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.percentage-input-group input {
+    flex: 1;
+}
+
+.percentage-input-group select {
+    width: 80px;
+    flex: none;
+}
+
+.percentage-display {
+    font-size: 0.9em;
+    color: #666;
+    margin-top: 4px;
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 20px;
+    }
+    
+    .button-grid {
+        grid-template-columns: 1fr;
+    }
+} 
