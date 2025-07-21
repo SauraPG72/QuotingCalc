@@ -1,3 +1,21 @@
+function formatPaymentString(monthlyPayment, monthlyFee, weeklyVisible, fortnightlyVisible) {
+    const weekly = monthlyPayment / (52/12);
+    const fortnightly = monthlyPayment / (26/12);
+    let paymentParts = [];
+    paymentParts.push(`$ ${monthlyPayment.toFixed(2)}`);
+    if (fortnightlyVisible) {
+        paymentParts.push(`$${fortnightly.toFixed(2)} (fortnightly)`);
+    }
+    if (weeklyVisible) {
+        paymentParts.push(`$${weekly.toFixed(2)} (weekly)`);
+    }
+    const paymentString = paymentParts.join(' OR ');
+    const feeString = monthlyFee > 0 
+        ? ` (incl. $${monthlyFee.toFixed(2)} monthly fee)`
+        : ' (no monthly fees)';
+    return paymentString + feeString;
+}
+
 function addQuoteToLog() {
     const data = getLoanInputs();
     const results = performLoanCalculations(data);
@@ -7,9 +25,7 @@ function addQuoteToLog() {
         financeAmount: data.originalPrincipal,
         asset: data.assetDescription,
         term: `${data.months} months`,
-        payment: data.monthlyFee > 0 
-            ? `$ ${results.printedAmount.toFixed(2)} (incl. $${data.monthlyFee.toFixed(2)} monthly fee)`
-            : `$ ${results.printedAmount.toFixed(2)} (no monthly fees)`,
+        payment: formatPaymentString(results.printedAmount, data.monthlyFee, weeklyVisible, fortnightlyVisible),
         type: data.repaymentType.charAt(0).toUpperCase() + data.repaymentType.slice(1),
         residual: data.residualValue > 0 
             ? `$${data.residualValue.toLocaleString('en-AU', {minimumFractionDigits: 2})} (${((data.residualValue/data.originalPrincipal)*100).toFixed(0)}%)`

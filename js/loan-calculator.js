@@ -3,6 +3,8 @@ let quotesData = [];
 let comparisonRateVisible = true;
 let brokerageVisible = true;
 let baseRateVisible = true;
+let weeklyVisible = false;
+let fortnightlyVisible = false;
 
 function getLoanInputs() {
     const principal = parseFloat(document.getElementById('principal').value) || 0;
