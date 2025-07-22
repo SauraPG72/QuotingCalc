@@ -52,7 +52,15 @@ function updateQuotesTable() {
     const tbody = document.getElementById('quotesBody');
     tbody.innerHTML = '';
     
+    // Update payment string for all quotes based on current toggles
     quotesData.forEach(quote => {
+        // Recalculate payment string for display
+        quote.payment = formatPaymentString(
+            parseFloat(quote.payment.split(' ')[1]), // Use the original monthly payment if available
+            parseFloat(quote.monthlyFee.replace(/[^\d.]/g, '')),
+            weeklyVisible,
+            fortnightlyVisible
+        );
         const row = tbody.insertRow();
         row.innerHTML = `
             <td>${quote.date}</td>
@@ -95,6 +103,13 @@ function updateEmailQuoteDisplay() {
                 quotes: []
             };
         }
+        // Recalculate payment string for display
+        quote.payment = formatPaymentString(
+            parseFloat(quote.payment.split(' ')[1]),
+            parseFloat(quote.monthlyFee.replace(/[^\d.]/g, '')),
+            weeklyVisible,
+            fortnightlyVisible
+        );
         groupedQuotes[key].quotes.push(quote);
     });
     
