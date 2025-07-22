@@ -2,13 +2,20 @@ function formatPaymentString(monthlyPayment, monthlyFee, weeklyVisible, fortnigh
     const weekly = monthlyPayment / (52/12);
     const fortnightly = monthlyPayment / (26/12);
     let paymentParts = [];
+    
+    // Always include monthly payment
     paymentParts.push(`$ ${monthlyPayment.toFixed(2)}`);
+    
+    // Add fortnightly if toggled on
     if (fortnightlyVisible) {
         paymentParts.push(`$${fortnightly.toFixed(2)} (fortnightly)`);
     }
+    
+    // Add weekly if toggled on
     if (weeklyVisible) {
         paymentParts.push(`$${weekly.toFixed(2)} (weekly)`);
     }
+    
     const paymentString = paymentParts.join(' OR ');
     const feeString = monthlyFee > 0 
         ? ` (incl. $${monthlyFee.toFixed(2)} monthly fee)`
@@ -25,6 +32,7 @@ function addQuoteToLog() {
         financeAmount: data.originalPrincipal,
         asset: data.assetDescription,
         term: `${data.months} months`,
+        originalMonthlyPayment: results.printedAmount, // Store the original monthly payment
         payment: formatPaymentString(results.printedAmount, data.monthlyFee, weeklyVisible, fortnightlyVisible),
         type: data.repaymentType.charAt(0).toUpperCase() + data.repaymentType.slice(1),
         residual: data.residualValue > 0 
@@ -54,9 +62,12 @@ function updateQuotesTable() {
     
     // Update payment string for all quotes based on current toggles
     quotesData.forEach(quote => {
+        // Use the stored original monthly payment
+        const originalMonthlyPayment = quote.originalMonthlyPayment || 0;
+        
         // Recalculate payment string for display
         quote.payment = formatPaymentString(
-            parseFloat(quote.payment.split(' ')[1]), // Use the original monthly payment if available
+            originalMonthlyPayment,
             parseFloat(quote.monthlyFee.replace(/[^\d.]/g, '')),
             weeklyVisible,
             fortnightlyVisible
@@ -103,9 +114,12 @@ function updateEmailQuoteDisplay() {
                 quotes: []
             };
         }
+        // Use the stored original monthly payment
+        const originalMonthlyPayment = quote.originalMonthlyPayment || 0;
+        
         // Recalculate payment string for display
         quote.payment = formatPaymentString(
-            parseFloat(quote.payment.split(' ')[1]),
+            originalMonthlyPayment,
             parseFloat(quote.monthlyFee.replace(/[^\d.]/g, '')),
             weeklyVisible,
             fortnightlyVisible

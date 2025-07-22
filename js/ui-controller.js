@@ -1,6 +1,3 @@
-let weeklyVisible = false;
-let fortnightlyVisible = false;
-
 function toggleBaseRate() {
     baseRateVisible = !baseRateVisible;
     document.getElementById('baseRateRow').style.display = baseRateVisible ? 'flex' : 'none';
