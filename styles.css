@@ -177,7 +177,7 @@ input[type="number"]:focus, select:focus, input[type="text"]:focus {
 }
 
 .email-quote-table {
-    width: 100%;
+    width: 595px;
     border-collapse: collapse;
     background: white;
     font-family: Arial, sans-serif;
@@ -194,12 +194,12 @@ input[type="number"]:focus, select:focus, input[type="text"]:focus {
 .email-quote-table .label-col {
     background-color: #f0f0f0;
     font-weight: bold;
-    width: 40%;
+    width: 150px;
 }
 
 .email-quote-table .value-col {
     background-color: white;
-    width: 60%;
+    width: 445px;
 }
 
 .email-additional-info {
