@@ -20,12 +20,12 @@
                 
                 <div class="input-group">
                     <label>Principal Amount ($)</label>
-                    <input type="number" id="principal" value="150000" step="0.01">
+                    <input type="number" id="principal" value="0" step="0.01">
                 </div>
 
                 <div class="input-group">
                     <label>Asset Description</label>
-                    <input type="text" id="assetDescription" value="New Land Rover Defender" placeholder="e.g. New Land Rover Defender">
+                    <input type="text" id="assetDescription" value="" placeholder="e.g. New Land Rover Defender">
                 </div>
 
                 <div class="input-group">
@@ -70,7 +70,7 @@
                     <label>Repayment Type</label>
                     <select id="repaymentType">
                         <option value="arrears">Arrears</option>
-                        <option value="advance">Advance</option>
+                        <option value="advance" selected>Advance</option>
                     </select>
                 </div>
 
@@ -80,7 +80,7 @@
                         <input type="number" id="residualValue" value="0" step="0.01">
                         <select id="residualType" onchange="updateResidualCalculation()">
                             <option value="dollar">$</option>
-                            <option value="percent">%</option>
+                            <option value="percent" selected>%</option>
                         </select>
                     </div>
                     <div class="percentage-display" id="residualDisplay"></div>
@@ -92,7 +92,7 @@
                         <input type="number" id="brokerage" value="0" step="0.01">
                         <select id="brokerageType" onchange="updateBrokerageCalculation()">
                             <option value="dollar">$</option>
-                            <option value="percent">%</option>
+                            <option value="percent" selected>%</option>
                         </select>
                     </div>
                     <div class="percentage-display" id="brokerageDisplay"></div>
