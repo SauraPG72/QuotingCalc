@@ -335,14 +335,118 @@ input[type="number"]:focus, select:focus, input[type="text"]:focus {
     margin-top: 4px;
 }
 
+/* Toggle Switch Styles */
+.toggle-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 12px;
+}
+
+.toggle-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.toggle-label {
+    font-weight: 500;
+    font-size: 0.9em;
+    color: #255565;
+    cursor: pointer;
+}
+
+.toggle-switch {
+    position: relative;
+    width: 44px;
+    height: 24px;
+    background: #ccc;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.toggle-switch.active {
+    background: #4EB395;
+}
+
+.toggle-switch::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.toggle-switch.active::after {
+    transform: translateX(20px);
+}
+
+/* Payment Frequency Radio Styles */
+.frequency-selector {
+    display: flex;
+    gap: 0;
+    margin-top: 15px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid #255565;
+}
+
+.frequency-option {
+    flex: 1;
+    text-align: center;
+}
+
+.frequency-option input[type="checkbox"] {
+    display: none;
+}
+
+.frequency-option label {
+    display: block;
+    padding: 10px 15px;
+    background: white;
+    color: #255565;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9em;
+    border-right: 1px solid #255565;
+}
+
+.frequency-option:last-child label {
+    border-right: none;
+}
+
+.frequency-option input[type="checkbox"]:checked + label {
+    background: #255565;
+    color: white;
+}
+
+.frequency-option label:hover {
+    background: rgba(37, 85, 101, 0.1);
+}
+
+.frequency-option input[type="checkbox"]:checked + label:hover {
+    background: #4EB395;
+}
+
 @media (max-width: 768px) {
     .main-content {
         grid-template-columns: 1fr;
         gap: 20px;
         padding: 20px;
     }
-    
+
     .button-grid {
         grid-template-columns: 1fr;
+    }
+
+    .frequency-selector {
+        flex-direction: column;
     }
 } 

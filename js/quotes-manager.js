@@ -1,26 +1,67 @@
-function formatPaymentString(monthlyPayment, monthlyFee, weeklyVisible, fortnightlyVisible) {
+function formatPaymentString(monthlyPayment, monthlyFee, monthlyVis, fortnightlyVis, weeklyVis) {
     const weekly = monthlyPayment / (52/12);
     const fortnightly = monthlyPayment / (26/12);
-    let paymentParts = [];
-    
-    // Always include monthly payment
-    paymentParts.push(`$ ${monthlyPayment.toFixed(2)}`);
-    
-    // Add fortnightly if toggled on
-    if (fortnightlyVisible) {
-        paymentParts.push(`$${fortnightly.toFixed(2)} (fortnightly)`);
-    }
-    
-    // Add weekly if toggled on
-    if (weeklyVisible) {
-        paymentParts.push(`$${weekly.toFixed(2)} (weekly)`);
-    }
-    
-    const paymentString = paymentParts.join(' OR ');
-    const feeString = monthlyFee > 0 
+    const feeString = monthlyFee > 0
         ? ` (incl. $${monthlyFee.toFixed(2)} monthly fee)`
         : ' (no monthly fees)';
-    return paymentString + feeString;
+
+    let paymentParts = [];
+
+    // Build payment string in order: monthly, fortnightly, weekly
+    if (monthlyVis) {
+        paymentParts.push(`$${monthlyPayment.toFixed(2)} (monthly)${feeString}`);
+    }
+    if (fortnightlyVis) {
+        paymentParts.push(`$${fortnightly.toFixed(2)} (fortnightly)${feeString}`);
+    }
+    if (weeklyVis) {
+        paymentParts.push(`$${weekly.toFixed(2)} (weekly)${feeString}`);
+    }
+
+    // Fallback to monthly if nothing selected
+    if (paymentParts.length === 0) {
+        paymentParts.push(`$${monthlyPayment.toFixed(2)} (monthly)${feeString}`);
+    }
+
+    return paymentParts.join(' OR ');
+}
+
+function calculateTotalHiringInstallments(quote) {
+    // Get the original monthly payment (without monthly fee) and term
+    const monthlyPayment = quote.originalMonthlyPayment || 0;
+    const termMonths = parseInt(quote.term) || 0;
+
+    // Parse residual/balloon value
+    let balloon = 0;
+    if (quote.residual && quote.residual !== 'NIL') {
+        const match = quote.residual.match(/\$([\d,]+\.?\d*)/);
+        if (match) {
+            balloon = parseFloat(match[1].replace(/,/g, ''));
+        }
+    }
+
+    // Parse origination fee if not financed
+    let origFeeUpfront = 0;
+    if (quote.originationFee && quote.originationFee.includes('payable at settlement')) {
+        const match = quote.originationFee.match(/\$\s*([\d,]+)/);
+        if (match) {
+            origFeeUpfront = parseFloat(match[1].replace(/,/g, ''));
+        }
+    }
+
+    // Parse lender/doc fee if not financed
+    let docFeeUpfront = 0;
+    if (quote.lenderFee && quote.lenderFee.includes('payable at settlement')) {
+        const match = quote.lenderFee.match(/\$\s*([\d,]+)/);
+        if (match) {
+            docFeeUpfront = parseFloat(match[1].replace(/,/g, ''));
+        }
+    }
+
+    // Calculate total: repayments * term + balloon + upfront fees
+    const totalHiring = (monthlyPayment * termMonths) + balloon + origFeeUpfront + docFeeUpfront;
+
+    return totalHiring;
 }
 
 function addQuoteToLog() {
@@ -33,7 +74,7 @@ function addQuoteToLog() {
         asset: data.assetDescription,
         term: `${data.months} months`,
         originalMonthlyPayment: results.printedAmount, // Store the original monthly payment
-        payment: formatPaymentString(results.printedAmount, data.monthlyFee, weeklyVisible, fortnightlyVisible),
+        payment: formatPaymentString(results.printedAmount, data.monthlyFee, monthlyVisible, fortnightlyVisible, weeklyVisible),
         type: data.repaymentType.charAt(0).toUpperCase() + data.repaymentType.slice(1),
         residual: data.residualValue > 0 
             ? `$${data.residualValue.toLocaleString('en-AU', {minimumFractionDigits: 2})} (${((data.residualValue/data.originalPrincipal)*100).toFixed(0)}%)`
@@ -69,8 +110,9 @@ function updateQuotesTable() {
         quote.payment = formatPaymentString(
             originalMonthlyPayment,
             parseFloat(quote.monthlyFee.replace(/[^\d.]/g, '')),
-            weeklyVisible,
-            fortnightlyVisible
+            monthlyVisible,
+            fortnightlyVisible,
+            weeklyVisible
         );
         const row = tbody.insertRow();
         row.innerHTML = `
@@ -121,8 +163,9 @@ function updateEmailQuoteDisplay() {
         quote.payment = formatPaymentString(
             originalMonthlyPayment,
             parseFloat(quote.monthlyFee.replace(/[^\d.]/g, '')),
-            weeklyVisible,
-            fortnightlyVisible
+            monthlyVisible,
+            fortnightlyVisible,
+            weeklyVisible
         );
         groupedQuotes[key].quotes.push(quote);
     });
@@ -147,6 +190,12 @@ function updateEmailQuoteDisplay() {
         
         // Quote options for this finance amount/asset
         group.quotes.forEach(quote => {
+            // Calculate total hiring installments
+            const totalHiring = calculateTotalHiringInstallments(quote);
+            const totalHiringLine = totalHiringVisible
+                ? `<p><strong>Total Hiring Installments:</strong> $${totalHiring.toLocaleString('en-AU', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>`
+                : '';
+
             const quoteDiv = document.createElement('div');
             quoteDiv.innerHTML = `
                 <table class="email-quote-table" style="margin-top: 10px;">
@@ -169,6 +218,7 @@ function updateEmailQuoteDisplay() {
                     <p class="${comparisonRateVisible ? '' : 'hidden'}"><strong>Comparison rate:</strong> ${quote.comparisonRate}</p>
                     <p class="${baseRateVisible ? '' : 'hidden'}"><strong>Base rate:</strong> ${quote.baseRate}</p>
                     <p class="${brokerageVisible ? '' : 'hidden'}"><strong>Commissions:</strong> ${quote.commissions}</p>
+                    ${totalHiringLine}
                 </div>
             `;
             container.appendChild(quoteDiv);

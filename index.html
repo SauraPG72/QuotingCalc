@@ -137,19 +137,42 @@
                 <div class="button-grid">
                     <button class="btn" onclick="addQuoteToLog()">Add Quote to Log</button>
                     <button class="btn btn-danger" onclick="clearQuotesLog()">Clear Quotes Log</button>
-                    <button class="btn" onclick="toggleBaseRate()">Toggle Base Rate</button>
-                    <button class="btn" onclick="toggleComparisonRate()">Toggle Comparison Rate</button>
-                    <button class="btn" onclick="toggleBrokerage()" id="brokerageToggle">Toggle Commissions</button>
                 </div>
-                <div style="display: flex; align-items: center; gap: 20px; margin-top: 12px;">
-                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 500;">
-                        <input type="checkbox" id="weeklyToggle" onchange="toggleWeeklyRepayments()" style="accent-color: #4EB395; width: 20px; height: 20px;">
-                        Weekly Repayment
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 500;">
-                        <input type="checkbox" id="fortnightlyToggle" onchange="toggleFortnightlyRepayments()" style="accent-color: #4EB395; width: 20px; height: 20px;">
-                        Fortnightly Repayment
-                    </label>
+
+                <!-- Payment Frequency Selector -->
+                <div class="frequency-selector">
+                    <div class="frequency-option">
+                        <input type="checkbox" id="freqMonthly" value="monthly" checked onchange="updatePaymentFrequency()">
+                        <label for="freqMonthly">Monthly</label>
+                    </div>
+                    <div class="frequency-option">
+                        <input type="checkbox" id="freqFortnightly" value="fortnightly" onchange="updatePaymentFrequency()">
+                        <label for="freqFortnightly">Fortnightly</label>
+                    </div>
+                    <div class="frequency-option">
+                        <input type="checkbox" id="freqWeekly" value="weekly" onchange="updatePaymentFrequency()">
+                        <label for="freqWeekly">Weekly</label>
+                    </div>
+                </div>
+
+                <!-- Display Toggles -->
+                <div class="toggle-container">
+                    <div class="toggle-item">
+                        <div class="toggle-switch active" id="baseRateToggle" onclick="toggleBaseRate()"></div>
+                        <span class="toggle-label" onclick="toggleBaseRate()">Base Rate</span>
+                    </div>
+                    <div class="toggle-item">
+                        <div class="toggle-switch active" id="comparisonRateToggle" onclick="toggleComparisonRate()"></div>
+                        <span class="toggle-label" onclick="toggleComparisonRate()">Comparison Rate</span>
+                    </div>
+                    <div class="toggle-item">
+                        <div class="toggle-switch active" id="brokerageToggleSwitch" onclick="toggleBrokerage()"></div>
+                        <span class="toggle-label" onclick="toggleBrokerage()">Commissions</span>
+                    </div>
+                    <div class="toggle-item">
+                        <div class="toggle-switch" id="totalHiringToggle" onclick="toggleTotalHiring()"></div>
+                        <span class="toggle-label" onclick="toggleTotalHiring()">Total Hiring</span>
+                    </div>
                 </div>
             </div>
 
@@ -224,9 +247,8 @@
     <script src="js/ui-controller.js"></script>
     <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Sync toggle checkboxes with JS state
-    if (typeof weeklyVisible !== 'undefined') document.getElementById('weeklyToggle').checked = weeklyVisible;
-    if (typeof fortnightlyVisible !== 'undefined') document.getElementById('fortnightlyToggle').checked = fortnightlyVisible;
+    // Sync toggle switches with JS state
+    syncToggleSwitches();
 });
 </script>
 </body>
